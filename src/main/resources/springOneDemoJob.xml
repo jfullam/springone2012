@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<job id="footballJob" xmlns="http://batch.jsr352/jsl">
+	<step id="playerLoad" next="gameLoad">
+		<chunk reader="flatFileItemReader" 
+		 writer="itemWriter" 
+		 processor="dummyProcessor"
+		 chunk-size="1"
+		 checkpoint-policy="item">
+			<properties>
+					<property name="reader.spring.id" value="playerFileItemReader" applyTo="reader" />
+					<property name="writer.spring.id" value="playerWriter" applyTo="writer" />
+			</properties>
+		 </chunk>		
+	</step>
+	<step id="gameLoad" next="playerSummarization">
+			<chunk reader="flatFileItemReader" 
+					writer="itemWriter" 
+					processor="dummyProcessor"
+				    chunk-size="1"
+				    checkpoint-policy="item" >
+				<properties>
+					<property name="reader.spring.id" value="gameFileItemReader" applyTo="reader" />
+					<property name="writer.spring.id" value="gameWriter" applyTo="writer" />
+				</properties>
+			</chunk>
+	</step>
+	
+	<step id="playerSummarization" >
+		<chunk reader="jdbcCursorItemReader" 
+				writer="itemWriter" 
+				processor="dummyProcessor"
+			    chunk-size="1"
+			    checkpoint-policy="item" >
+			<properties>
+				<property name="reader.spring.id" value="playerSummarizationSource" applyTo="reader" />
+				<property name="writer.spring.id" value="summaryWriter" applyTo="writer" />
+			</properties>
+		</chunk>
+	</step>
+
+</job>
+
+
+
+
+<!--	<job id="footballJob" xmlns="http://www.springframework.org/schema/batch">
+		<step id="playerload" next="gameLoad">
+			<tasklet>
+				<chunk reader="playerFileItemReader" writer="playerWriter" 
+	                   commit-interval="${job.commit.interval}" />
+			</tasklet>
+		</step>
+		<step id="gameLoad" next="playerSummarization">
+			<tasklet>
+				<chunk reader="gameFileItemReader" writer="gameWriter" 
+	                   commit-interval="${job.commit.interval}" />
+			</tasklet>
+		</step>
+		<step id="playerSummarization" parent="summarizationStep" />
+	</job>
+	
+	<step id="summarizationStep" xmlns="http://www.springframework.org/schema/batch">
+		<tasklet>
+			<chunk reader="playerSummarizationSource" writer="summaryWriter" 
+                   commit-interval="${job.commit.interval}" />
+		</tasklet>
+	</step>
+	-->

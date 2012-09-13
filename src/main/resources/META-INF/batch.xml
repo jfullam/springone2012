@@ -1,0 +1,9 @@
+<batch-artifacts>
+  
+    <item-reader id="flatFileItemReader" class="org.springframework.batch.item.file.SpringFlatFileItemReaderAdaptor" />
+    <item-reader id="jdbcCursorItemReader" class="org.springframework.batch.item.database.JdbcCursorItemReaderAdaptor" />
+    <item-writer id="itemWriter" class="springone.jsr352.sample.football.SpringItemWriterAdaptor" /> 
+    <item-processor id="dummyProcessor" class="springone.jsr352.sample.football.DummyItemProcessor" />
+
+
+</batch-artifacts>
